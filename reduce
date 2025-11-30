@@ -1,0 +1,15 @@
+Array.prototype.myReduce = function (cb, acc) {
+  let i = 0;
+  if(!acc){
+      acc = this[i]
+      i++;
+  }
+  for(;i<this.length;i++){
+      acc = cb(acc, this[i],i, this)
+  }
+  
+  return acc;
+};
+
+
+console.log([1,2,3,4].myReduce((acc,c)=>acc+c,0))
