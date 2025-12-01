@@ -1,0 +1,16 @@
+Function.prototype.myBind = function (obj,...args){
+    obj.temp =this ;
+   return function (...newargs){
+         obj.temp(...args,...newargs);
+   }
+}
+
+
+let obj = {
+    name:"Sanskrati"
+}
+
+function getName (a,b,c){
+    console.log(this.name,a,b,c)
+}
+getName.myBind(obj,1,2,3)()
