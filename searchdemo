@@ -1,0 +1,84 @@
+Build: Search Suggestion Demo
+
+# html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="dropdown">
+      <input placeholder="search" oninput="searchD(event)" id="search-box" />
+      <div id="items-data"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body
+
+</html>
+
+
+
+let data = [];
+const render = (data)=>{
+  let itemsData = document.getElementById("items-data");
+  itemsData.innerText=""
+  for(let i=0;i<data.length;i++){
+    const el = document.createElement("div");
+    el.innerText=data[i]?.word;
+    itemsData.append(el)
+  }
+}
+
+async function getData(){
+  
+   const res = await  fetch("https://api.datamuse.com/sug?s=app");
+   const Rdata =  await res.json();
+   data= Rdata;
+   render(Rdata);
+}
+
+
+function search(e){
+    let filteredData =[];
+    data.filter((item)=>{
+      if(item.word.includes(e.target.value)){
+         filteredData.push(item)
+      }
+     
+    })
+    
+    render(filteredData)
+}
+
+function debounce (fn,delay=100){
+  let timer;
+  return function(...args){
+    clearTimeout(timer)
+    timer= setTimeout(()=>{
+      fn.apply(this,args)
+    },delay)
+  }
+}
+
+const searchD =  debounce(search)
+console.log("Search")
+getData();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
