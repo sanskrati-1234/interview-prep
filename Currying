@@ -1,0 +1,8 @@
+function add(a) {
+  return function (b) {
+    if (b === undefined) return a;   // base case
+    return add(a + b);               // ⭐ return the next function
+  };
+}
+
+console.log(add(2)(3)(4)()); // 9
