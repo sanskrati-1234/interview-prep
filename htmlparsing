@@ -1,0 +1,34 @@
+here’s the Critical Rendering Path (CRP) explained step-by-step in very simple words.
+
+You ask for a page
+You type a URL or click a link. The browser starts the process to get that page.
+
+Find the server (DNS) & open connection
+Browser asks “what IP is this site?” (DNS), then opens a network connection (TCP) and does the secure handshake (TLS) if needed.
+
+Request the HTML
+Browser sends an HTTP request to the server. Server sends back the page’s HTML.
+
+Start parsing HTML → build the DOM
+The browser reads the HTML text and builds a tree of nodes called the DOM (Document Object Model). Think of the DOM as the page’s structure: tags become nodes.
+
+Download and parse CSS → build the CSSOM
+While parsing HTML, the browser finds <link> and <style> and downloads/parses CSS into the CSSOM (CSS Object Model) — a map of style rules.
+
+Handle JavaScript
+If the HTML includes scripts, the browser may pause building the DOM until the script is downloaded and run (because scripts can change the DOM/CSS). defer and async change that behaviour. JS can read/modify DOM or styles.
+
+Build the Render Tree
+The browser combines the DOM + CSSOM into a render tree — it decides which elements are visible and what styles apply. Invisible elements (like display: none) are omitted.
+
+Layout (a.k.a. reflow)
+The browser calculates the exact position and size for each render-tree node — where boxes go on the page. This is called layout.
+
+Paint
+The browser paints each element into layers — turns the layout into pixels (colors, text, shadows, images).
+
+Composite
+The browser combines those layers (often using the GPU) and shows the final image on your screen.
+
+Interactive
+After painting, event handlers, animations and further JS can change the DOM/CSS — which may trigger repaints or reflows for parts of the page.
