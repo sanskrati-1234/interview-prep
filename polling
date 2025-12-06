@@ -1,0 +1,45 @@
+const pollingJob = async ({
+  url,
+  timeout = 20000,
+  delay = 2000,
+  maxAttempt = 10
+}) => {
+  
+  let attempt = 0;
+  const terminalStates = ["DONE", "FAILED"];
+  const startTime = Date.now();
+
+  while (attempt < maxAttempt) {
+    attempt++;
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Request failed");
+
+      const data = await res.json();
+      console.log(`Attempt ${attempt}:`, data.status);
+
+      // terminal states found
+      if (terminalStates.includes(data.status)) {
+        return data;
+      }
+
+      // timeout exceeded
+      if (Date.now() - startTime >= timeout) {
+        throw new Error("Timeout exceeded");
+      }
+
+    } catch (err) {
+      console.log("Error:", err.message);
+      // keep retrying until maxAttempt
+      if (attempt >= maxAttempt) {
+        throw err;
+      }
+    }
+
+    // WAIT BETWEEN POLLS — MUST BE INSIDE LOOP
+    await new Promise((res) => setTimeout(res, delay));
+  }
+
+  throw new Error("Max attempts reached");
+};
