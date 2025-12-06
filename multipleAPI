@@ -1,0 +1,33 @@
+const multipleAPI = async (urls, max) => {
+  let results = [];
+
+  let promises = urls.map(async (url, i) => {
+    try {
+      let res = await fetch(url);
+      if (!res.ok) return;
+      results[i] = await res.json();
+      return results[i];
+    } catch (err) {
+      results[i] = await retry(url, max);
+      return results[i];
+    }
+  });
+
+  await Promise.all(promises);
+  return results;
+};
+
+const retry = async (url, max) => {
+  let attempts = 0;
+
+  while (attempts < max) {
+    try {
+      let res = await fetch(url);
+      if (!res.ok) return;
+      return await res.json();
+    } catch (err) {
+      attempts++;
+      if (attempts === max) return err;
+    }
+  }
+};
