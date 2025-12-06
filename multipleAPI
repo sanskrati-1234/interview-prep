@@ -1,3 +1,4 @@
+Write a function that executes multiple API calls in parallel but retries only the ones that failed.
 const multipleAPI = async (urls, max) => {
   let results = [];
 
