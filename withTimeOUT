@@ -1,0 +1,21 @@
+const withTimeot = async(promise,ms)=>{
+     let timeid ;
+     let hasReached;
+    return new Promise((resolve,rej)=>{
+       timeid= setTimeout(()=>{
+           hasReached= true;
+           rej("timeout")
+       },ms)
+       
+       promise.then(res=>{
+           if(hasReached) return
+          clearTimeout(timeid)
+
+           resolve("done")
+       }).catch(err=>{
+          if(hasReached) return
+          clearTimeout(timeid)
+          rej ("err")
+       })
+    })
+}
