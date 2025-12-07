@@ -1,0 +1,26 @@
+import {useState} from "react"
+export default function App() {
+    let [search, setSearch] = useState("")
+    const searchQuery = (e)=>{
+         setSearch(e.target.value)
+    }
+
+    const debounce = function (func,delay=1000){
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            
+            timer = setTimeout(()=>{
+                 console.log("ccc")
+                func.apply(this,args)
+            },delay)
+        }
+    }
+    let deSearch = debounce(searchQuery)
+        console.log("search",search)
+    return(<>
+                <input onChange={deSearch} />
+               <div>{search}</div>
+    
+    </>)
+}
