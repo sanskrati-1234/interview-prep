@@ -1,0 +1,29 @@
+//I havw one arrays Which contains some object and object has some tasks Each task can take sometimes There is pipe u can execute 2 objects task at a time and If one object task finished execution then give chance to next one
+
+async function runALL(tasks){
+    for(let i=0;i<tasks.length;i++){
+        await tasks[i]();
+    }
+}
+
+async function process(objects){
+    let index =0;
+    async function startNew(){
+        if(index>=objects.length) return
+         await runALL(objects[index++].tasks)
+         startNew()
+    }
+    
+    await Promise.all([startNew(),startNew()])
+}
+
+function wait(t) {
+  return new Promise(res => setTimeout(res, t));
+}
+
+const objects = [
+  { tasks: [() => wait(1000), () => wait(5000)] },
+  { tasks: [() => wait(800)] },
+  { tasks: [() => wait(1200), () => wait(300)] },
+  { tasks: [() => wait(400)] },
+];
