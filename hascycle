@@ -1,0 +1,29 @@
+function canReach(source,target,visited= new Set()){
+    if(source===target) return true;
+   
+     if (source && typeof source === "object") {
+        if (visited.has(source)) return false;
+            visited.add(source);
+            for(let key in source){
+                if (canReach(source[key], target, visited)) return true;
+            }
+     }
+    
+}
+
+function cycle(obj1,obj2){
+    return canReach(obj1,obj2) &&  canReach(obj2,obj1)
+}
+
+let a = {
+    b:3
+}
+let b ={
+   a:4 
+}
+
+a.b=b;
+
+b.a=a;
+
+console.log(cycle(a,b))
