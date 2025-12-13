@@ -1,0 +1,29 @@
+let state = [];
+let index = 0;
+
+function useState(initialValue) {
+  const currentIndex = index;
+
+  // initialize state once
+  if (state[currentIndex] === undefined) {
+    state[currentIndex] = initialValue;
+  }
+
+  function setState(newValue) {
+    if (typeof newValue === "function") {
+      state[currentIndex] = newValue(state[currentIndex]);
+    } else {
+      state[currentIndex] = newValue;
+    }
+
+    render(); // re-render component
+  }
+
+  index++;
+  return [state[currentIndex], setState];
+}
+
+function render() {
+  index = 0; // reset before every render
+  Counter();
+}
